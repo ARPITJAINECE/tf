@@ -1,3 +1,4 @@
+
 trigger:
   branches:
     include:
@@ -7,13 +8,18 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - checkout: self
   - task: TerraformInstaller@0
     inputs:
       terraformVersion: 'latest'
+
   - script: |
       terraform init
-      terraform plan -out=tfplan
+      terraform plan
       terraform apply -auto-approve
+       terraform init -reconfigure -backend-config="resource_group_name=rg-first-aj-02" -backend-config="storage_account_name=storageaccountlmslms" -backend-config="container_name=tfstate"
     displayName: 'Run Terraform'
-    
+    env:
+      ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+      ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+      ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+      ARM_TENANT_ID: $(ARM_TENANT_ID)
