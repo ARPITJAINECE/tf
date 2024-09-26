@@ -6,13 +6,6 @@ terraform {
     }
   }
   
-  backend "azurerm" {
-    resource_group_name  = azurerm_resource_group.main.name
-    storage_account_name  = azurerm_storage_account.main.name
-    container_name        = azurerm_storage_container.main.name
-    key                   = "terraform.tfstate"
-  }
-}
 
 provider "azurerm" {
   subscription_id = "7ce53ffe-80a5-42a6-af05-890a8d744280"
