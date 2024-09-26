@@ -58,8 +58,6 @@ resource "azurerm_storage_account" "main" {
   tags = {
     keyForStorageAccount = "valueForStorageAccount"
   }
-
-  depends_on = [azurerm_resource_group.main]
 }
 
 # Create the blob container for storing the state file
@@ -67,6 +65,4 @@ resource "azurerm_storage_container" "main" {
   name                  = var.container_name
   storage_account_name   = azurerm_storage_account.main.name
   container_access_type   = "private"
-
-  depends_on = [azurerm_storage_account.main]
 }
