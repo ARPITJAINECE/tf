@@ -23,6 +23,27 @@ variable "resource_group_name" {
   default     = "rg-first"
 }
 
+# Set a default value for the storage account name
+variable "storage_account_name" {
+  type        = string
+  description = "Enter the Name of The Storage Account : "
+  default     = "mystorageaccount123123123123"  # Replace with your desired default storage account name (must be globally unique)
+}
+
+resource "azurerm_storage_account" "terraformMadeStorageAccountIdentifier" {
+  name                     = var.storage_account_name
+  resource_group_name      = azurerm_resource_group.terraformMadeRGIdentifier.name
+  location                 = azurerm_resource_group.terraformMadeRGIdentifier.location
+  account_tier             = "Standard"
+  account_replication_type = "GRS"
+  access_tier              = "Hot"
+
+  tags = {
+    keyForStorageAccount = "valueForStorageAccount"
+  }
+
+  depends_on = [azurerm_resource_group.terraformMadeRGIdentifier]
+}
 resource "azurerm_resource_group" "terraformMadeRGIdentifier" {
   name     = var.resource_group_name
   location = "West US 2"
