@@ -7,12 +7,14 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+  - checkout: self  # This checks out your code from GitHub
+
   - task: TerraformInstaller@0
     inputs:
       terraformVersion: 'latest'
 
   - script: |
-      terraform init
+      terraform init -backend-config="access_key=$(ARM_ACCESS_KEY)"  # Ensure you set ARM_ACCESS_KEY in variable group
       terraform apply -auto-approve
     displayName: 'Run Terraform'
     env:
