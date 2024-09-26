@@ -14,11 +14,15 @@ steps:
       terraformVersion: 'latest'
 
   - script: |
-      terraform init -backend-config="access_key=$(ARM_ACCESS_KEY)"  # Ensure you set ARM_ACCESS_KEY in variable group
-      terraform apply -auto-approve
+      terraform init -backend-config="resource_group_name=$(RESOURCE_GROUP_NAME)" -backend-config="storage_account_name=$(STORAGE_ACCOUNT_NAME)" -backend-config="container_name=$(CONTAINER_NAME)"
+      terraform plan -out=tfplan
+      terraform apply tfplan
     displayName: 'Run Terraform'
     env:
       ARM_CLIENT_ID: $(ARM_CLIENT_ID)
       ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
       ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
       ARM_TENANT_ID: $(ARM_TENANT_ID)
+      RESOURCE_GROUP_NAME: $(RESOURCE_GROUP_NAME)
+      STORAGE_ACCOUNT_NAME: $(STORAGE_ACCOUNT_NAME)
+      CONTAINER_NAME: $(CONTAINER_NAME)
