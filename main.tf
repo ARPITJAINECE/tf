@@ -32,7 +32,7 @@ variable "resource_group_name" {
 variable "storage_account_name" {
   type        = string
   description = "The name of the storage account (must be globally unique)."
-  default     = "mysa0101023"  # Ensure this is globally unique
+  default     = "saGitHubPipeLinesTest"  # Ensure this is globally unique
 }
 
 variable "container_name" {
