@@ -20,14 +20,14 @@ provider "azurerm" {
 variable "resource_group_name" {
   type        = string
   description = "Enter the Name of the RG : "
-  default     = "rg-first-aj"
+  default     = "rg-first-aj-01"
 }
 
 # Set a default value for the storage account name
 variable "storage_account_name" {
   type        = string
   description = "Enter the Name of The Storage Account : "
-  default     = "mysamysamysa"  # Replace with your desired default storage account name (must be globally unique)
+  default     = "mysamysamysaabccba"  # Replace with your desired default storage account name (must be globally unique)
 }
 
 resource "azurerm_storage_account" "terraformMadeStorageAccountIdentifier" {
