@@ -7,15 +7,13 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - checkout: self  # This checks out your code from GitHub
-
+  - checkout: self
   - task: TerraformInstaller@0
     inputs:
       terraformVersion: 'latest'
-
   - script: |
       terraform init
       terraform plan -out=tfplan
-      terraform apply tfplan
+      terraform apply -auto-approve
     displayName: 'Run Terraform'
     
