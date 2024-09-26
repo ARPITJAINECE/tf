@@ -1,4 +1,11 @@
 terraform {
+  backend "azurerm" {
+    resource_group_name  = var.resource_group_name
+    storage_account_name  = var.storage_account_name
+    container_name        = var.container_name
+    key                   = "terraform.tfstate"  # State file name
+  }
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -12,39 +19,54 @@ provider "azurerm" {
   client_id       = "7b5b0a33-29ab-489c-868b-8344bc5c99e2"
   client_secret   = "zl48Q~lx53_YeVUp~18hnKYzf0QtM3gBwRFhPc7Z"
   tenant_id       = "a8fa88d0-1b32-43dc-a2ce-09a8f7ac140f"
-  features {
-
-  }
+  features {}
 }
 
+# Define input variables
 variable "resource_group_name" {
   type        = string
-  description = "Enter the Name of the RG : "
-  default     = "rg-first-aj-01"
+  description = "The name of the resource group."
+  default     = "rg-first-aj-02"
 }
 
-# Set a default value for the storage account name
 variable "storage_account_name" {
   type        = string
-  description = "Enter the Name of The Storage Account : "
-  default     = "mysamysamysaabccba"  # Replace with your desired default storage account name (must be globally unique)
+  description = "The name of the storage account (must be globally unique)."
+  default     = "mysa0101023"  # Ensure this is globally unique
 }
 
-resource "azurerm_storage_account" "terraformMadeStorageAccountIdentifier" {
+variable "container_name" {
+  type        = string
+  description = "The name of the blob container for storing the state file."
+  default     = "tfstate"
+}
+
+# Create the resource group
+resource "azurerm_resource_group" "main" {
+  name     = var.resource_group_name
+  location = "West US 2"
+}
+
+# Create the storage account
+resource "azurerm_storage_account" "main" {
   name                     = var.storage_account_name
-  resource_group_name      = azurerm_resource_group.terraformMadeRGIdentifier.name
-  location                 = azurerm_resource_group.terraformMadeRGIdentifier.location
+  resource_group_name      = azurerm_resource_group.main.name
+  location                 = azurerm_resource_group.main.location
   account_tier             = "Standard"
   account_replication_type = "GRS"
-  access_tier              = "Hot"
-
+  
   tags = {
     keyForStorageAccount = "valueForStorageAccount"
   }
 
-  depends_on = [azurerm_resource_group.terraformMadeRGIdentifier]
+  depends_on = [azurerm_resource_group.main]
 }
-resource "azurerm_resource_group" "terraformMadeRGIdentifier" {
-  name     = var.resource_group_name
-  location = "West US 2"
+
+# Create the blob container for storing the state file
+resource "azurerm_storage_container" "main" {
+  name                  = var.container_name
+  storage_account_name   = azurerm_storage_account.main.name
+  container_access_type   = "private"
+
+  depends_on = [azurerm_storage_account.main]
 }
