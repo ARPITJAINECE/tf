@@ -20,7 +20,7 @@ provider "azurerm" {
 variable "resource_group_name" {
   type        = string
   description = "Enter the Name of the RG : "
-  default     = "rg-first"
+  default     = "rg-first-aj"
 }
 
 # Set a default value for the storage account name
